@@ -1,0 +1,39 @@
+dist: trusty
+language: python
+group: edge
+
+python:
+  - "3.6"
+services:
+  - docker
+
+addons:
+  apt:
+    packages:
+      - docker-ce
+
+before_install:
+
+  # Install module
+  - pip3 install -e .
+
+  # Put docker into "experimental" for manifest function
+  - mkdir -p $HOME/.docker
+  - echo '{"experimental":"enabled"}' > "$HOME/.docker/config.json"
+
+    # Register qemu as cross-compiler
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+
+  # Login to docker for push
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+install:
+
+  # Build images
+  - cd tests
+  - docker-compose build
+
+script:
+
+  # manifest and push
+  - python3 -m docker-manifest -d $DOCKER_USERNAME hello1 hello2

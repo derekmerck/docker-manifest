@@ -22,11 +22,11 @@ def docker_push_manifest(manifest):
     logging.debug(cmd)
     call(cmd)
 
-def docker_manifest_create(manifest, aliases):
+def docker_manifest_create(manifest, aliases, service):
     # There is no "manifest remove" function, only "amend", so clean manually
     fp = os.path.expandvars( "$HOME/.docker/manifests/docker.io_{domain}_{service}-{tag}".format(
         domain=opts.domain,
-        service=opts.service,
+        service=service,
         tag=opts.tag
     ))
     if os.path.exists(fp):
@@ -59,7 +59,8 @@ def parse_args():
                    help="docker image tag (default: %(default)s)")
     p.add_argument('--dryrun', action="store_true",
                    help="Retag and push images, but do not push manifest")
-    p.add_argument("service", help="service base name")
+    p.add_argument("services", nargs="+",
+                   help="service base names")
 
     opts = p.parse_args()
     return opts
@@ -72,58 +73,60 @@ if __name__ == "__main__":
 
     with open(opts.file) as f:
         data = yaml.safe_load(f)
-        services = data.get('services')
+        images = data.get('services')
 
-    aliases = []
-    annotations = {}
+    for service in opts.services:
 
-    for k, v in services.items():
+        aliases = []
+        annotations = {}
 
-        arch = v.get('build', {}).get('args', {}).get("DOCKER_ARCH", "amd64")
-        logging.debug("Found {} for {}".format(arch, k))
+        for k, v in images.items():
 
-        if k == "{}-{}".format(opts.service, arch):
+            arch = v.get('build', {}).get('args', {}).get("DOCKER_ARCH", "amd64")
+            logging.debug("Found {} for {}".format(arch, k))
 
-            # Retag and include this one in the manifest
-            current_name = v.get('image')
-            new_name = "{domain}/{service}:{tag}-{arch}".format(
-                domain=opts.domain,
-                service=opts.service,
-                tag=opts.tag,
-                arch=arch)
+            if k == "{}-{}".format(service, arch):
 
-            docker_rename_image( current_name, new_name )
-            docker_push_image( new_name )
+                # Retag and include this one in the manifest
+                current_name = v.get('image')
+                new_name = "{domain}/{service}:{tag}-{arch}".format(
+                    domain=opts.domain,
+                    service=service,
+                    tag=opts.tag,
+                    arch=arch)
 
-            aliases.append( new_name )
+                docker_rename_image( current_name, new_name )
+                docker_push_image( new_name )
 
-            def get_arch_str(arch):
-                if arch == "amd64" or arch == "x86_64":
-                    return "amd64", None
-                elif arch == "arm32v7" or arch == "arm7hf":
-                    return "arm", "v7"
-                elif arch == "arm64v8" or arch == "aarch64":
-                    return "arm64", "v8"
-                else:
-                    raise ValueError
+                aliases.append( new_name )
 
-            annotations[k] = {
-                'image':   new_name,
-                'arch':    get_arch_str(arch)[0],
-                'variant': get_arch_str(arch)[1],
-                'os':      'linux'
-            }
+                def get_arch_str(arch):
+                    if arch == "amd64" or arch == "x86_64":
+                        return "amd64", None
+                    elif arch == "arm32v7" or arch == "arm7hf":
+                        return "arm", "v7"
+                    elif arch == "arm64v8" or arch == "aarch64":
+                        return "arm64", "v8"
+                    else:
+                        raise ValueError
 
-    manifest = "{domain}/{service}:{tag}".format(
-        domain=opts.domain,
-        service=opts.service,
-        tag=opts.tag
-    )
+                annotations[k] = {
+                    'image':   new_name,
+                    'arch':    get_arch_str(arch)[0],
+                    'variant': get_arch_str(arch)[1],
+                    'os':      'linux'
+                }
 
-    docker_manifest_create(manifest, aliases)
+        manifest = "{domain}/{service}:{tag}".format(
+            domain=opts.domain,
+            service=service,
+            tag=opts.tag
+        )
 
-    for annotation in annotations.values():
-        docker_manifest_annotate(manifest, annotation)
+        docker_manifest_create(manifest, aliases, service)
 
-    if not opts.dryrun:
-        docker_push_manifest(manifest)
+        for annotation in annotations.values():
+            docker_manifest_annotate(manifest, annotation)
+
+        if not opts.dryrun:
+            docker_push_manifest(manifest)

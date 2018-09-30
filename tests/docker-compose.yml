@@ -2,18 +2,39 @@ version: '3'
 
 services:
 
-  hello-amd64:
+  hello1-amd64:
     build:
       context: .
-    image: hello-amd64
+    image: hello1-amd64
 
-  hello-arm32v7:
+  hello1-arm32v7:
     build:
       context: .
       args:
         RESIN_ARCH:   armv7hf
         DOCKER_ARCH:  arm32v7
-    image: hello-arm32v7
+    image: hello1-arm32v7
+
+  hello1-arm64v8:
+    build:
+      context: .
+      args:
+        RESIN_ARCH:   aarch64
+        DOCKER_ARCH:  arm64v8
+    image: hello1-arm64v8
+
+  hello2-amd64:
+    build:
+      context: .
+    image: hello2-amd64
+
+  hello2-arm32v7:
+    build:
+      context: .
+      args:
+        RESIN_ARCH:   armv7hf
+        DOCKER_ARCH:  arm32v7
+    image: hello2-arm32v7
 
   hello-arm64v8:
     build:
@@ -21,4 +42,4 @@ services:
       args:
         RESIN_ARCH:   aarch64
         DOCKER_ARCH:  arm64v8
-    image: hello-arm64v8
+    image: hello2-arm64v8
