@@ -50,7 +50,7 @@ def docker_manifest_annotate(manifest, item):
 
 def parse_args():
 
-    p = ArgumentParser(description = "%(prog)s creates Docker manifests for multi-architecture images from docker-compose service definitions")
+    p = ArgumentParser(description = "docker-manifest creates Docker manifests for multi-architecture images from docker-compose service definitions")
     p.add_argument("-f", "--file", default="docker-compose.yml",
                    help="docker-compose file with service definitions (default: %(default)s)")
     p.add_argument("-d", "--domain",

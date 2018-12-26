@@ -28,8 +28,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ),
     license='MIT',
-    install_requires=['pyyaml'],
-    entry_points = {
-        'console_scripts': ['docker-manifest=docker-manifest']
-    }
+    install_requires=['pyyaml']
 )
