@@ -29,5 +29,5 @@ setuptools.setup(
     ),
     license='MIT',
     install_requires=['pyyaml'],
-    entrypoint="docker-manifest.py"
+    scripts=["docker-manifest.py"]
 )
