@@ -30,6 +30,6 @@ setuptools.setup(
     license='MIT',
     install_requires=['pyyaml'],
     entry_points = {
-        'console_scripts': ['docker-manifest=docker-manifest.docker-manifest']
+        'console_scripts': ['docker-manifest=docker-manifest:__main__']
     }
 )
