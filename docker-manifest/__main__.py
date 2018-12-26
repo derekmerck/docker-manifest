@@ -4,7 +4,6 @@ import yaml, logging, os, shutil
 from subprocess import call
 from argparse import ArgumentParser
 
-
 def docker_rename_image(old, new):
     cmd = ['docker', 'tag', old, new]
     logging.debug(cmd)
@@ -50,7 +49,7 @@ def docker_manifest_annotate(manifest, item):
 
 def parse_args():
 
-    p = ArgumentParser(description = "docker-manifest creates Docker manifests for multi-architecture images from docker-compose service definitions")
+    p = ArgumentParser(description = "Create Docker manifests for multi-architecture images from docker-compose service definitions")
     p.add_argument("-f", "--file", default="docker-compose.yml",
                    help="docker-compose file with service definitions (default: %(default)s)")
     p.add_argument("-d", "--domain",
@@ -58,7 +57,7 @@ def parse_args():
     p.add_argument("-t", "--tag", default="latest",
                    help="docker image tag (default: %(default)s)")
     p.add_argument('--dryrun', action="store_true",
-                   help="Retag and push images, but do not push manifest")
+                   help="retag and push images, but do not push manifest")
     p.add_argument("services", nargs="+",
                    help="service base names")
 
