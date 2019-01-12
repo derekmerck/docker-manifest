@@ -20,7 +20,7 @@ Pip Dependencies:  pyyaml, click
 ## Usage
 
 ```bash
-$ docker-manifest {-s all|service1,...} {-a all|amd64,...} namespace
+$ docker-manifest {-s service1,...} {-a amd64,...} namespace
 ```
 
 `docker-compose.yml` services name keys should be formatted as "{service}-{arch}".  For example:
@@ -34,8 +34,8 @@ services:
 This would register as a service definition with basename "my_service" and architecture "amd64".
 Architectures may be any one of `amd64`, `arm32v7`, or `arm64v8`.
 
-`$ docker-manifest my_service namespace` would retag the output image `my_image` as
-`namespace/my_service:tag-amd64` and link it to `domain/my_service:tag` on docker.io.
+`$ docker-manifest -s my_service -a amd64 namespace` would retag the output image `my_image` as
+`namespace/my_service:latest-amd64` and link it to `domain/my_service:tag` on docker.io.
 
 All images should be present in docker.io/my_namespace (not just locally) when the manifest is
 created, or the script will report failures and no manifest will be generated.  Any locally available

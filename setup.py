@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 metadata = {
     'name': "docker-manifest",
-    'version': "1.2",
+    'version': "1.2.1",
     'author': "Derek Merck",
     'author_email': "derek_merck@brown.edu"
 }
