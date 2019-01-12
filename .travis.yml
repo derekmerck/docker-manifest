@@ -36,4 +36,4 @@ install:
 script:
 
   # manifest and push
-  - python3 -m docker-manifest -d $DOCKER_USERNAME hello1 hello2
+  - docker-manifest -s hello1 hello2 $DOCKER_USERNAME

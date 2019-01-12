@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 metadata = {
     'name': "docker-manifest",
-    'version': "1.1",
+    'version': "1.2",
     'author': "Derek Merck",
     'author_email': "derek_merck@brown.edu"
 }
@@ -19,14 +19,17 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/derekmerck/docker-manifest",
-    packages=setuptools.find_packages(),
-    include_package_data=True,
+    py_modules=['DockerManifest'],
     classifiers=(
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ),
     license='MIT',
-    install_requires=['pyyaml']
+    install_requires=['pyyaml', 'click'],
+    entry_points='''
+        [console_scripts]
+        docker-manifest=DockerManifest:cli
+    ''',
 )

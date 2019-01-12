@@ -15,31 +15,27 @@ $ pip install git+https://github.com/derekmerck/docker-manifest
 ```
 
 Platform Dependencies:  Docker
-Pip Dependencies:  pyyaml
+Pip Dependencies:  pyyaml, click
 
 ## Usage
 
-```yaml
-$ python3 -m docker-manifest -d domain service {service...}
+```bash
+$ docker-manifest {-s all|services...} {-a all|amd64...} namespace
 ```
 
-`docker-compose.yml` services name keys should be formatted as "{service}-{arch}", and arch should be
-included in a "DOCKER_ARCH" build arg.  For example:
+`docker-compose.yml` services name keys should be formatted as "{service}-{arch}".  For example:
 
 ```yaml
 services:
   my_service-amd64:
-    build:
-      args:
-        DOCKER_ARCH: amd64
     image: my_image
 ```
 
 This would register as a service definition with basename "my_service" and architecture "amd64".
 Architectures may be any one of `amd64`, `arm32v7`, or `arm64v8`.
 
-`$ python3 -m docker-manifest -d domain my_service` would retag the output image `my_image` as
-`domain/my_service:tag-amd64` and link it to `domain/my_service:tag` on docker.io.
+`$ docker-manifest my_service namespace` would retag the output image `my_image` as
+`namespace/my_service:tag-amd64` and link it to `domain/my_service:tag` on docker.io.
 
 All images should be present in docker.io/my_namespace (not just locally) when the manifest is
 created, or the script will report failures and no manifest will be generated.  Any locally available

@@ -36,7 +36,7 @@ services:
         DOCKER_ARCH:  arm32v7
     image: hello2-arm32v7
 
-  hello-arm64v8:
+  hello2-arm64v8:
     build:
       context: .
       args:
