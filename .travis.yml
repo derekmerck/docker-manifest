@@ -36,4 +36,4 @@ install:
 script:
 
   # manifest and push
-  - docker-manifest -s hello1 hello2 $DOCKER_USERNAME
+  - docker-manifest -s hello1,hello2 $DOCKER_USERNAME

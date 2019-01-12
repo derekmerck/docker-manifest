@@ -20,7 +20,7 @@ Pip Dependencies:  pyyaml, click
 ## Usage
 
 ```bash
-$ docker-manifest {-s all|services...} {-a all|amd64...} namespace
+$ docker-manifest {-s all|service1,...} {-a all|amd64,...} namespace
 ```
 
 `docker-compose.yml` services name keys should be formatted as "{service}-{arch}".  For example:
