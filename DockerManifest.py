@@ -3,7 +3,8 @@ from subprocess import call as _call
 import re
 from pprint import pformat
 
-NO_CALL = True
+# Set this to avoid accidentally issuing docker commands
+NO_CALL = False
 
 def call(cmd):
     logging.info(cmd)
