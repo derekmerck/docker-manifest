@@ -83,6 +83,8 @@ def cli(namespace, file, services, archs, tag, dryrun, verbose):
     if dryrun:
         NO_CALL = True
 
+    services = services.split(",")
+
     data = yaml.safe_load(file)
     images = data.get('services')
 

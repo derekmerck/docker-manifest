@@ -2,12 +2,12 @@ version: '3'
 
 services:
 
-  hello1-amd64:
+  hello-1-amd64:
     build:
       context: .
     image: hello1-amd64
 
-  hello1-arm32v7:
+  hello-1-arm32v7:
     build:
       context: .
       args:
@@ -15,7 +15,7 @@ services:
         DOCKER_ARCH:  arm32v7
     image: hello1-arm32v7
 
-  hello1-arm64v8:
+  hello-1-arm64v8:
     build:
       context: .
       args:
